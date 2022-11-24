@@ -30,13 +30,13 @@ df = df.groupby(["month", "COMPLAINT_TYPE"]).COMPLAINT_TYPE.count().reset_index(
 
 #TEMPS VISUALIZATION
 
-temps["month"] = temps["datetime"].dt.month
-
-temps = temps.groupby("month").mean()
-
-temps["month"] = temps.index
-
 #NOTE: If you want to see the temps visualization, ONLY uncomment the code under
+
+#temps["month"] = temps["datetime"].dt.month
+
+#temps = temps.groupby("month").mean()
+
+#temps["month"] = temps.index
 
 #t = sns.barplot(data=temps, x="month", y="temp")
 #t.set_ylabel("Average Temperature (F)")
@@ -44,6 +44,7 @@ temps["month"] = temps.index
 #t.set_title("Average temperatures for Chicago per month (2021)")
 #plt.show()
 
+# TEMPS VS COMPLAINTS VISUALIZATION
 
 #NOTE: If you want to see the temps vs complaints visualization, ONLY uncomment the code under
 
@@ -57,3 +58,24 @@ temps["month"] = temps.index
 #s.set_xlabel("Amount of Pollution Complaints")
 #s.set_title("Temperature vs Amount of Pollution Complaints in Chicago (2021)")
 #plt.show()
+
+#AIR QUALITY VISUALIZATION
+
+
+airQ = pd.read_csv("daily_aqi_by_cbsa_2021.csv", parse_dates=["Date"])
+airQ.rename(columns={"Date": "datetime"}, inplace = True)
+airQ = airQ[airQ["CBSA Code"].isin([16980])]
+airQ = pd.merge(temps, airQ, how="inner", on="datetime")
+airQ["month"] = airQ["datetime"].dt.month
+airQ = airQ.groupby("month").mean()
+airQ["month"] = airQ.index
+
+#NOTE: If you want to see the air quality visualization, ONLY uncomment the code under
+
+#a = sns.barplot(data=airQ, x="month", y="AQI")
+#a.set_ylabel("Air Quality Index")
+#a.set_xlabel("Month")
+#a.set_title("Air Quality Index For Each Month In Chicago (2021)")
+#plt.show()
+
+#print(airQ.head(12))
